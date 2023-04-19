@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 15, 2023 at 04:25 AM
+-- Generation Time: Apr 19, 2023 at 01:34 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `bbsv-buhi`
+-- Database: `msduran-nabua`
 --
 
 -- --------------------------------------------------------
@@ -45,7 +45,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `called_at`, `pinged_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'DEVELOPMENT', 'no-avatar.jpg', 'admin', 'admin', NULL, '2023-04-06 14:07:28', '2023-02-19 07:36:32', '2023-04-06 14:07:28');
+(1, 1, 'DEVELOPMENT', 'no-avatar.jpg', 'admin', 'admin', NULL, '2023-04-19 11:18:14', '2023-02-19 07:36:32', '2023-04-19 11:18:14');
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,7 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `competition_id`, `slug`, `title`, `created_at`, `updated_at`) VALUES
-(1, 1, 'pageant-night', 'Pageant Night', '2023-04-06 13:25:10', '2023-04-06 13:25:10');
+(1, 1, 'pageant-night', 'Pageant Night', '2023-04-19 11:13:11', '2023-04-19 11:13:11');
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,7 @@ CREATE TABLE `competitions` (
 --
 
 INSERT INTO `competitions` (`id`, `slug`, `title`, `created_at`, `updated_at`) VALUES
-(1, 'bbsv-buhi-2023', 'Binibining San Vicente 2023', '2023-04-06 13:24:04', '2023-04-06 13:24:04');
+(1, 'msduran-nabua-2023', 'Miss Duran 2023', '2023-04-06 13:24:04', '2023-04-06 13:24:04');
 
 -- --------------------------------------------------------
 
@@ -119,31 +119,6 @@ CREATE TABLE `criteria` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `criteria`
---
-
-INSERT INTO `criteria` (`id`, `event_id`, `title`, `percentage`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Beauty of the Face', 30, '2023-04-06 13:30:46', '2023-04-06 13:30:46'),
-(2, 1, 'Mastery', 30, '2023-04-06 13:30:54', '2023-04-06 13:30:54'),
-(3, 1, 'Stage Presence', 30, '2023-04-06 13:31:05', '2023-04-06 13:31:05'),
-(4, 1, 'Over-all Impact', 10, '2023-04-06 13:31:15', '2023-04-06 13:31:15'),
-(5, 2, 'Beauty of the Face', 30, '2023-04-06 13:31:43', '2023-04-06 13:31:43'),
-(6, 2, 'Body Proportion', 30, '2023-04-06 13:31:54', '2023-04-06 13:31:54'),
-(7, 2, 'Stage Presence', 30, '2023-04-06 13:32:04', '2023-04-06 13:32:04'),
-(8, 2, 'Over-all Impact', 10, '2023-04-06 13:32:13', '2023-04-06 13:32:13'),
-(9, 3, 'Beauty of the Face', 30, '2023-04-06 13:32:33', '2023-04-06 13:32:33'),
-(10, 3, 'Content of the Answer', 30, '2023-04-06 13:32:45', '2023-04-06 13:32:45'),
-(11, 3, 'Delivery', 30, '2023-04-06 13:35:25', '2023-04-06 13:35:25'),
-(12, 3, 'Over-all Impact', 10, '2023-04-06 13:36:18', '2023-04-06 13:36:18'),
-(13, 4, 'Beauty of the Face', 30, '2023-04-06 13:36:49', '2023-04-06 13:36:49'),
-(14, 4, 'Poise and Bearing', 30, '2023-04-06 13:37:01', '2023-04-06 13:37:01'),
-(15, 4, 'Over-all Design', 30, '2023-04-06 13:37:10', '2023-04-06 13:37:10'),
-(16, 4, 'Over-all Impact', 10, '2023-04-06 13:37:19', '2023-04-06 13:37:19'),
-(17, 5, 'Intelligence', 40, '2023-04-06 13:37:34', '2023-04-06 13:37:34'),
-(18, 5, 'Beauty of the Face', 30, '2023-04-06 13:37:45', '2023-04-06 13:37:45'),
-(19, 5, 'Poise and Bearing', 30, '2023-04-06 13:37:56', '2023-04-06 13:37:56');
 
 -- --------------------------------------------------------
 
@@ -176,24 +151,6 @@ CREATE TABLE `eliminations` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `eliminations`
---
-
-INSERT INTO `eliminations` (`id`, `event_id`, `team_id`, `created_at`, `updated_at`) VALUES
-(1, 5, 7, '2023-04-06 13:56:12', '2023-04-06 13:56:12'),
-(2, 5, 3, '2023-04-06 13:56:13', '2023-04-06 13:56:13'),
-(3, 5, 10, '2023-04-06 13:56:14', '2023-04-06 13:56:14'),
-(4, 5, 5, '2023-04-06 13:56:14', '2023-04-06 13:56:14'),
-(5, 5, 12, '2023-04-06 13:56:15', '2023-04-06 13:56:15'),
-(6, 5, 8, '2023-04-06 13:56:16', '2023-04-06 13:56:16'),
-(7, 5, 9, '2023-04-06 13:56:17', '2023-04-06 13:56:17'),
-(9, 5, 4, '2023-04-06 13:56:23', '2023-04-06 13:56:23'),
-(10, 5, 1, '2023-04-06 13:56:24', '2023-04-06 13:56:24'),
-(11, 5, 6, '2023-04-06 13:56:25', '2023-04-06 13:56:25'),
-(12, 5, 2, '2023-04-06 13:56:25', '2023-04-06 13:56:25'),
-(13, 5, 11, '2023-04-06 13:56:26', '2023-04-06 13:56:26');
-
 -- --------------------------------------------------------
 
 --
@@ -208,17 +165,6 @@ CREATE TABLE `events` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `events`
---
-
-INSERT INTO `events` (`id`, `category_id`, `slug`, `title`, `created_at`, `updated_at`) VALUES
-(1, 1, 'production', 'Production', '2023-04-06 13:25:37', '2023-04-06 14:07:37'),
-(2, 1, 'swimwear', 'Swimwear', '2023-04-06 13:26:05', '2023-04-06 14:07:42'),
-(3, 1, 'advocacy', 'Advocacy Speech', '2023-04-06 13:26:30', '2023-04-06 13:28:50'),
-(4, 1, 'evening-gown', 'Evening Gown', '2023-04-06 13:29:04', '2023-04-06 14:07:48'),
-(5, 1, 'final-qa', 'Final Q & A', '2023-04-06 13:29:53', '2023-04-06 13:29:53');
 
 -- --------------------------------------------------------
 
@@ -248,7 +194,9 @@ INSERT INTO `judges` (`id`, `number`, `name`, `avatar`, `username`, `password`, 
 (2, 2, 'Judge 02', 'no-avatar.jpg', 'judge02', 'judge02', NULL, NULL, '2023-04-06 13:58:28', '2023-04-06 13:58:28'),
 (3, 3, 'Judge 03', 'no-avatar.jpg', 'judge03', 'judge03', NULL, NULL, '2023-04-06 13:58:42', '2023-04-06 13:58:42'),
 (4, 4, 'Judge 04', 'no-avatar.jpg', 'judge04', 'judge04', NULL, NULL, '2023-04-06 13:59:26', '2023-04-06 13:59:26'),
-(5, 5, 'Judge 05', 'no-avatar.jpg', 'judge05', 'judge05', NULL, NULL, '2023-04-06 14:00:00', '2023-04-06 14:00:00');
+(5, 5, 'Judge 05', 'no-avatar.jpg', 'judge05', 'judge05', NULL, NULL, '2023-04-06 14:00:00', '2023-04-06 14:00:00'),
+(6, 6, 'Judge 06', 'no-avatar.jpg', 'judge06', 'judge06', NULL, NULL, '2023-04-19 11:13:48', '2023-04-19 11:14:25'),
+(7, 7, 'Judge 07', 'no-avatar.jpg', 'judge07', 'judge07', NULL, NULL, '2023-04-19 11:13:48', '2023-04-19 11:14:28');
 
 -- --------------------------------------------------------
 
@@ -264,37 +212,6 @@ CREATE TABLE `judge_event` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `judge_event`
---
-
-INSERT INTO `judge_event` (`id`, `judge_id`, `event_id`, `is_chairman`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, '2023-04-06 14:00:46', '2023-04-06 14:00:46'),
-(2, 1, 2, 0, '2023-04-06 14:00:48', '2023-04-06 14:00:48'),
-(3, 1, 3, 0, '2023-04-06 14:00:51', '2023-04-06 14:00:51'),
-(4, 1, 4, 0, '2023-04-06 14:00:53', '2023-04-06 14:00:53'),
-(5, 1, 5, 0, '2023-04-06 14:00:55', '2023-04-06 14:00:55'),
-(6, 2, 1, 0, '2023-04-06 14:01:01', '2023-04-06 14:01:01'),
-(7, 2, 2, 0, '2023-04-06 14:01:03', '2023-04-06 14:01:03'),
-(8, 2, 3, 0, '2023-04-06 14:01:06', '2023-04-06 14:01:06'),
-(9, 2, 4, 0, '2023-04-06 14:01:08', '2023-04-06 14:01:08'),
-(10, 2, 5, 0, '2023-04-06 14:01:10', '2023-04-06 14:01:10'),
-(11, 3, 1, 0, '2023-04-06 14:01:14', '2023-04-06 14:01:14'),
-(12, 3, 2, 0, '2023-04-06 14:01:16', '2023-04-06 14:01:16'),
-(13, 3, 3, 0, '2023-04-06 14:01:19', '2023-04-06 14:01:19'),
-(14, 3, 4, 0, '2023-04-06 14:01:21', '2023-04-06 14:01:21'),
-(15, 3, 5, 0, '2023-04-06 14:01:23', '2023-04-06 14:01:23'),
-(16, 4, 1, 0, '2023-04-06 14:01:28', '2023-04-06 14:01:28'),
-(17, 4, 2, 0, '2023-04-06 14:01:30', '2023-04-06 14:01:30'),
-(18, 4, 3, 0, '2023-04-06 14:01:33', '2023-04-06 14:01:33'),
-(19, 4, 4, 0, '2023-04-06 14:01:36', '2023-04-06 14:01:36'),
-(20, 4, 5, 0, '2023-04-06 14:01:38', '2023-04-06 14:01:38'),
-(21, 5, 1, 0, '2023-04-06 14:01:42', '2023-04-06 14:01:42'),
-(22, 5, 2, 0, '2023-04-06 14:01:45', '2023-04-06 14:01:45'),
-(23, 5, 3, 0, '2023-04-06 14:01:47', '2023-04-06 14:01:47'),
-(24, 5, 4, 0, '2023-04-06 14:01:49', '2023-04-06 14:01:49'),
-(25, 5, 5, 0, '2023-04-06 14:01:52', '2023-04-06 14:01:52');
 
 -- --------------------------------------------------------
 
@@ -372,7 +289,7 @@ CREATE TABLE `teams` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `number` tinyint(4) NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL,
-  `location` varchar(32) NOT NULL,
+  `location` varchar(64) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -383,18 +300,19 @@ CREATE TABLE `teams` (
 --
 
 INSERT INTO `teams` (`id`, `number`, `name`, `location`, `avatar`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Miles Tiffany Kaalim', 'Tabaco, Albay', '01-miles-tiffany-kaalim.jpg', '2023-04-06 13:50:48', '2023-04-09 06:38:09'),
-(2, 2, 'Chabelita P. Molina', 'San Antonio, Buhi', '02-chabelita-molina.jpg', '2023-04-06 13:52:26', '2023-04-09 06:38:15'),
-(3, 3, 'Neoli Kryss Angeline L. Abarientos', 'San Miguel, Nabua', '03-neoli-kryss-angeline-abarientos.jpg', '2023-04-06 13:43:02', '2023-04-09 06:38:22'),
-(4, 4, 'Erika Mae Recafranca', 'Iriga City', '04-erika-mae-recafranca.jpg', '2023-04-06 13:49:52', '2023-04-09 06:38:30'),
-(5, 5, 'Aaliyah Mae S. Mariscotes', 'San Vicente, Buhi', '05-aaliyah-mae-mariscotes.jpg', '2023-04-06 13:46:35', '2023-04-09 06:38:35'),
-(6, 6, 'Mary Claire Chavez', 'Santa Elena, Buhi', '06-mary-claire-chavez.jpg', '2023-04-06 13:51:50', '2023-04-09 06:38:40'),
-(7, 7, 'Hanna Grace A. Clavillas', 'San Isidro, Buhi', '07-hanna-grace-clavillas.jpg', '2023-04-06 13:42:20', '2023-04-09 06:38:44'),
-(8, 8, 'Maria Ericka Mae D. Ceneta', 'San Antonio, Buhi', '08-maria-ericka-mae-ceneta.jpg', '2023-04-06 13:47:48', '2023-04-09 06:38:49'),
-(9, 9, 'Trisha Jane Lopez', 'San Pascual, Buhi', '09-trisha-jane-lopez.jpg', '2023-04-06 13:48:16', '2023-04-09 06:38:54'),
-(10, 10, 'Mara Monte', 'Sta. Justina, Buhi', '10-mara-monte.jpg', '2023-04-06 13:45:57', '2023-04-09 06:39:03'),
-(11, 11, 'Hannah Paula E. Quebral', 'San Rafael, Buhi', '11-hannah-paula-quebral.jpg', '2023-04-06 13:53:01', '2023-04-09 06:39:07'),
-(12, 12, 'Lian Shaine Naparato', 'Sta. Justina, Buhi', '12-lian-shaine-naparato.jpg', '2023-04-06 13:47:09', '2023-04-09 06:39:13');
+(1, 1, 'ELLAINE DIMANARIG', 'Santiago, Iriga City', '01-ellaine-dimaranig.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(2, 2, 'KRISTEL OLIVE REJESUS', 'Ponso, Polangui, Albay', '02-kristel-olive-rejesus.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(3, 3, 'MARY DINE MONGE', 'Sto Domingo, Iriga City', '03-mary-dine-monge.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(4, 4, 'MIEN MIE EGIPTO', 'San Agustin, Iriga City', '04-mien-mie-egipto.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(5, 5, 'TRISHA LOPEZ', 'San Pascual, Buhi', '05-trisha-lopez.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(6, 6, 'BERNADETTE PANALIGAN', 'Palsong, Bula', '06-bernadette-panaligan.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(7, 7, 'MARA MONTE', 'Sta. Justina, Buhi', '07-mara-monte.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(8, 8, 'EURICKA LYN MORAÑA', 'San Vicente Gorong-Gorong, Nabua', '08-euricka-lyn-moraña.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(9, 9, 'AGATHA KAYE OLAYON', 'Sto Domingo, Iriga City', '09-agatha-kaye-olayon.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(10, 10, 'ANGELA SHERIZA TINO', 'Santiago, Bato', '10-angela-sheriza-tino.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(11, 11, 'CRISTELLE MAY SERMONA', 'Sta. Cruz, Nabua', '11-cristelle-may-sermona.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(12, 12, 'CHYNNA ALEXA ENIMEDEZ', 'Duran, Nabua', '12-chynna-alexa-enimedez.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48'),
+(13, 13, 'CLARISE PEREGRINO', 'San Antonio Ogbon, Nabua', '13-clarise-peregrino.jpg', '2023-04-19 11:31:48', '2023-04-19 11:31:48');
 
 -- --------------------------------------------------------
 
@@ -450,21 +368,6 @@ CREATE TABLE `titles` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `titles`
---
-
-INSERT INTO `titles` (`id`, `event_id`, `rank`, `title`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'Best in Production', '2023-04-07 05:09:18', '2023-04-07 05:09:18'),
-(2, 2, 1, 'Best in Swimwear', '2023-04-07 05:09:49', '2023-04-07 05:09:49'),
-(3, 3, 1, 'Best in Advocacy', '2023-04-07 05:10:14', '2023-04-07 05:10:14'),
-(4, 4, 1, 'Best in Evening Gown', '2023-04-07 05:10:42', '2023-04-07 05:10:42'),
-(5, 5, 1, 'Binibining San Vicente 2023', '2023-04-07 05:11:28', '2023-04-07 08:03:28'),
-(6, 5, 2, 'Binibining San Vicente Tourismo 2023', '2023-04-07 05:11:47', '2023-04-07 08:03:28'),
-(7, 5, 3, 'Binibining San Vicente Charity 2023', '2023-04-07 05:12:12', '2023-04-09 17:19:51'),
-(8, 5, 4, 'Binibining San Vicente 1st Runner Up', '2023-04-07 05:12:47', '2023-04-07 08:03:28'),
-(9, 5, 5, 'Binibining San Vicente 2nd Runner Up', '2023-04-07 05:13:01', '2023-04-07 08:03:28');
 
 --
 -- Indexes for dumped tables
@@ -633,7 +536,7 @@ ALTER TABLE `competitions`
 -- AUTO_INCREMENT for table `criteria`
 --
 ALTER TABLE `criteria`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `deductions`
@@ -645,25 +548,25 @@ ALTER TABLE `deductions`
 -- AUTO_INCREMENT for table `eliminations`
 --
 ALTER TABLE `eliminations`
-  MODIFY `id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` mediumint(9) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `judges`
 --
 ALTER TABLE `judges`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `judge_event`
 --
 ALTER TABLE `judge_event`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `noshows`
@@ -693,7 +596,7 @@ ALTER TABLE `ratings`
 -- AUTO_INCREMENT for table `teams`
 --
 ALTER TABLE `teams`
-  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `technicals`
@@ -711,7 +614,7 @@ ALTER TABLE `technical_event`
 -- AUTO_INCREMENT for table `titles`
 --
 ALTER TABLE `titles`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
