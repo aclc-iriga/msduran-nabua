@@ -59,7 +59,7 @@ else if(isset($_POST['signOut'])) {
 $routes = [
     [ "name" => "Main panel", "route" => "crud/competitions.php" ],
     [ "name" => "Tabulation", "route" => "http://localhost/msduran-nabua" ],
-    [ "name" => "Result"    , "route" => "results/top5" ],
+    [ "name" => "Top 5"     , "route" => "results/top5" ],
     [ "name" => "Guidelines", "route" => "crud/guidelines/event_ranking.php" ],
     [ "name" => "Assignment", "route" => "crud/assignment" ],
     [ "name" => "No show"   , "route" => "crud/noshow" ],
