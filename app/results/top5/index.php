@@ -41,7 +41,8 @@
     // process result
     $result = [];
     $unique_total_ranks    = [];
-    $unique_total_percentages = [];
+    $unique_total_percentages_rank = [];
+    $unique_total_percentages_average = [];
     $unique_adjusted_ranks = [];
     foreach($event1->getAllTeams() as $team) {
         $team_key = 'team_'.$team->getId();
@@ -49,54 +50,66 @@
         // get $event1 rank and average
         $rank1       = 0;
         $average1    = 0;
-        $percentage1 = 0;
+        $percentage_rank1 = 0;
+        $percentage_average1 = 0;
         if(isset($result1['teams'][$team_key])) {
             $rank1    = $result1['teams'][$team_key]['rank']['final']['fractional'];
             $average1 = $result1['teams'][$team_key]['ratings']['average'];
-            $percentage1 = $average1 * 0.10;
+            $percentage_rank1 = (100 - $rank1) * 0.10;
+            $percentage_average1 = $average1 * 0.10;
         }
 
         // get $event2 rank and average
         $rank2       = 0;
         $average2    = 0;
-        $percentage2 = 0;
+        $percentage_rank2 = 0;
+        $percentage_average2 = 0;
         if(isset($result2['teams'][$team_key])) {
             $rank2    = $result2['teams'][$team_key]['rank']['final']['fractional'];
             $average2 = $result2['teams'][$team_key]['ratings']['average'];
-            $percentage2 = $average2 * 0.20;
+            $percentage_rank2 = (100 - $rank2) * 0.20;
+            $percentage_average2 = $average2 * 0.20;
         }
 
         // get $event3 rank and average
         $rank3       = 0;
         $average3    = 0;
-        $percentage3 = 0;
+        $percentage_rank3 = 0;
+        $percentage_average3 = 0;
         if(isset($result3['teams'][$team_key])) {
             $rank3    = $result3['teams'][$team_key]['rank']['final']['fractional'];
             $average3 = $result3['teams'][$team_key]['ratings']['average'];
-            $percentage3 = $average1 * 0.30;
+            $percentage_rank3 = (100 - $rank3) * 0.30;
+            $percentage_average3 = $average3 * 0.30;
         }
 
         // get $event4 rank and average
         $rank4       = 0;
         $average4    = 0;
-        $percentage4 = 0;
+        $percentage_rank4 = 0;
+        $percentage_average4 = 0;
         if(isset($result4['teams'][$team_key])) {
             $rank4    = $result4['teams'][$team_key]['rank']['final']['fractional'];
             $average4 = $result4['teams'][$team_key]['ratings']['average'];
-            $percentage4 = $average1 * 0.40;
+            $percentage_rank4 = (100 - $rank4) * 0.40;
+            $percentage_average4 = $average4 * 0.40;
         }
 
         // get total rank, average, & percentage
         $total_rank    = $rank1 + $rank2 + $rank3 + $rank4;
         $total_average = ($average1 + $average2 + $average3 + $average4) / sizeof(EVENT_SLUGS);
-        $total_percentage = $percentage1 + $percentage2 + $percentage3 + $percentage4;
+        $total_percentage_rank = $percentage_rank1 + $percentage_rank2 + $percentage_rank3 + $percentage_rank4;
+        $total_percentage_average = $percentage_average1 + $percentage_average2 + $percentage_average3 + $percentage_average4;
 
         // push $total_rank to $unique_total_ranks
         if(!in_array($total_rank, $unique_total_ranks))
             $unique_total_ranks[] = $total_rank;
 
-        if (!in_array($total_percentage, $unique_total_percentages))
-            $unique_total_percentages[] = $total_percentage;
+        if (!in_array($total_percentage_rank, $unique_total_percentages_rank))
+            $unique_total_percentages_rank[] = $total_percentage_rank;
+
+        if (!in_array($total_percentage_average, $unique_total_percentages_average))
+            $unique_total_percentages_average[] = $total_percentage_average;
 
         // append to $result
         $result[$team_key] = [
@@ -105,28 +118,32 @@
                 EVENT_SLUGS[0] => [
                     'rank'    => $rank1,
                     'average' => $average1,
-                    'percentage' => $percentage1
+                    'percentage_rank' => $percentage_rank1,
+                    'percentage_average' => $percentage_average1
                 ],
                 EVENT_SLUGS[1] => [
                     'rank'    => $rank2,
                     'average' => $average2,
-                    'percentage' => $percentage2
+                    'percentage_rank' => $percentage_rank2,
+                    'percentage_average' => $percentage_average2
                 ],
                 EVENT_SLUGS[2] => [
                     'rank'    => $rank3,
                     'average' => $average3,
-                    'percentage' => $percentage3
+                    'percentage_rank' => $percentage_rank3,
+                    'percentage_average' => $percentage_average3
                 ],
                 EVENT_SLUGS[3] => [
                     'rank'    => $rank4,
                     'average' => $average4,
-                    'percentage' => $percentage4
+                    'percentage_rank' => $percentage_rank4,
+                    'percentage_average' => $percentage_average4
                 ]
             ],
             'average' => $total_average,
-            'percentage' => $total_percentage,
+            'percentage_average' => $total_percentage_average,
             'rank' => [
-                'total'    => $total_rank,
+                'total'    => $total_percentage_rank,
                 'dense'    => 0,
                 'initial'  => 0,
                 'adjusted' => 0,
@@ -140,15 +157,13 @@
     }
 
     // sort $unique_total_ranks
-    sort($unique_total_ranks);
-
-    rsort($unique_total_percentages);
+    rsort($unique_total_percentages_rank);
 
     // gather $rank_group (for getting fractional rank)
     $rank_group = [];
     foreach($result as $team_key => $team) {
         // get dense rank
-        $dense_rank = 1 + array_search($team['rank']['total'], $unique_total_ranks);
+        $dense_rank = 1 + array_search($team['rank']['total'], $unique_total_percentages_rank);
         $result[$team_key]['rank']['dense'] = $dense_rank;
 
         // push $team_key to $rank_group
@@ -160,7 +175,7 @@
 
     // get initial fractional rank
     $ctr = 0;
-    for($i = 0; $i < sizeof($unique_total_ranks); $i++) {
+    for($i = 0; $i < sizeof($unique_total_percentages_rank); $i++) {
         $key = 'rank_' . ($i + 1);
         $group = $rank_group[$key];
         $size = sizeof($group);
@@ -230,7 +245,7 @@
     foreach($titles as $title) {
         // update title of $unique_total_percentages[$i]'th team
         foreach($result as $team_key => $team) {
-            if($team['percentage'] == $unique_total_percentages[$i]) {
+            if($team['rank']['final']['fractional'] == $unique_final_fractional_ranks[$i]) {
                 $result[$team_key]['title'] = $titles[$i];
                 $tops_ordered[]   = $team['info']['id'];
                 $tops_unordered[] = $team['info']['id'];
@@ -238,7 +253,7 @@
         }
 
         $i += 1;
-        if($i >= sizeof($unique_total_percentages))
+        if($i >= sizeof($unique_final_fractional_ranks))
             break;
     }
 
@@ -279,7 +294,7 @@
 <table class="table table-bordered result">
     <thead>
     <tr class="table-secondary">
-        <th colspan="3" rowspan="2" class="text-center bt br bl">
+        <th colspan="3" rowspan="3" class="text-center bt br bl">
             <h1 class="m-0">TOP <?= sizeof($titles) ?></h1>
             <h5><?= $category_title ?></h5>
         </th>
@@ -295,40 +310,43 @@
         <th colspan="3" class="text-center text-success bt br" style="width: 11%">
             <?= $event4->getTitle() ?>
         </th>
-        <th rowspan="2" class="text-center bl bt br">
-            <span class="opacity-75">GENERAL<br>AVERAGE</span>
+        <th rowspan="3" class="text-center bl bt br">
+            <span class="opacity-75">TOTAL<br>AVERAGE<br>%</span>
         </th>
-        <th rowspan="2" class="text-center text-primary bl bt br">
-            <span class="opacity-75">TOTAL<br>PCT.</span>
+        <th rowspan="3" class="text-center text-info bl bt br">
+            <span class="opacity-75">TOTAL<br>RANK<br>%</span>
         </th>
-        <th rowspan="2" class="text-center text-primary bl bt br">
-            <span class="opacity-75">TOTAL<br>RANK</span>
-        </th>
-        <th rowspan="2" class="text-center bl bt br">
+        <th rowspan="3" class="text-center bl bt br">
             <span class="opacity-50">INITIAL<br>RANK</span>
         </th>
-        <th rowspan="2" class="text-center bl bt br">
+        <th rowspan="3" class="text-center bl bt br">
             FINAL<br>RANK
         </th>
-        <th rowspan="2" class="text-center bl bt br">
+        <th rowspan="3" class="text-center bl bt br">
             SLOT
         </th>
     </tr>
     <tr class="table-secondary">
-        <th class="text-center bl"><span class="opacity-75">Ave.</span></th>
-        <th class="text-center text-info ">10%</th>
+        <th colspan="3" class="text-center bl br">10%</th>
+        <th colspan="3" class="text-center bl br">20%</th>
+        <th colspan="3" class="text-center bl br">30%</th>
+        <th colspan="3" class="text-center bl br">40%</th>
+    </tr>
+    <tr class="table-secondary">
+        <th class="text-center bl"><span class="opacity-75">Ave.<br>%</span></th>
+        <th class="text-center text-info text-opacity-75">Rank<br>%</th>
         <th class="text-center text-primary br">Rank</th>
 
-        <th class="text-center bl"><span class="opacity-75">Ave.</span></th>
-        <th class="text-center text-info ">20%</th>
+        <th class="text-center bl"><span class="opacity-75">Ave.<br>%</span></th>
+        <th class="text-center text-info text-opacity-75">Rank<br>%</th>
         <th class="text-center text-primary br">Rank</th>
 
-        <th class="text-center bl"><span class="opacity-75">Ave.</span></th>
-        <th class="text-center text-info ">30%</th>
+        <th class="text-center bl"><span class="opacity-75">Ave.<br>%</span></th>
+        <th class="text-center text-info text-opacity-75">Rank<br>%</th>
         <th class="text-center text-primary br">Rank</th>
 
-        <th class="text-center bl"><span class="opacity-75">Ave.</span></th>
-        <th class="text-center text-info ">40%</th>
+        <th class="text-center bl"><span class="opacity-75">Ave.<br>%</span></th>
+        <th class="text-center text-info text-opacity-75">Rank<br>%</th>
         <th class="text-center text-primary br">Rank</th>
     </tr>
     </thead>
@@ -360,73 +378,74 @@
             </td>
 
             <!-- event1 -->
-            <td class="pe-3 bl" align="right">
+            <td class="text-center" align="right">
                 <span class="opacity-75">
-                    <?= number_format($team['inputs'][EVENT_SLUGS[0]]['average'], 2) ?>
+                    <?= number_format($team['inputs'][EVENT_SLUGS[0]]['percentage_average'], 2) ?>
                 </span>
             </td>
             <td class="text-info text-center">
-                <?= number_format($team['inputs'][EVENT_SLUGS[0]]['percentage'], 2) ?>
+                <?= number_format($team['inputs'][EVENT_SLUGS[0]]['percentage_rank'], 2) ?>
             </td>
             <td class="pe-3 text-primary br" align="right">
                 <?= number_format($team['inputs'][EVENT_SLUGS[0]]['rank'], 2) ?>
             </td>
 
             <!-- event2 -->
-            <td class="pe-3 bl" align="right">
+            <td class="text-center" align="right">
                 <span class="opacity-75">
-                    <?= number_format($team['inputs'][EVENT_SLUGS[1]]['average'], 2) ?>
+                    <?= number_format($team['inputs'][EVENT_SLUGS[1]]['percentage_average'], 2) ?>
                 </span>
             </td>
             <td class="text-info text-center">
-                <?= number_format($team['inputs'][EVENT_SLUGS[1]]['percentage'], 2) ?>
+                <?= number_format($team['inputs'][EVENT_SLUGS[1]]['percentage_rank'], 2) ?>
             </td>
             <td class="pe-3 text-primary br" align="right">
                 <?= number_format($team['inputs'][EVENT_SLUGS[1]]['rank'], 2) ?>
             </td>
 
-
             <!-- event3 -->
-            <td class="pe-3 bl" align="right">
+            <td class="text-center" align="right">
                 <span class="opacity-75">
-                    <?= number_format($team['inputs'][EVENT_SLUGS[2]]['average'], 2) ?>
+                    <?= number_format($team['inputs'][EVENT_SLUGS[2]]['percentage_average'], 2) ?>
                 </span>
             </td>
             <td class="text-info text-center">
-                <?= number_format($team['inputs'][EVENT_SLUGS[2]]['percentage'], 2) ?>
+                <?= number_format($team['inputs'][EVENT_SLUGS[2]]['percentage_rank'], 2) ?>
             </td>
             <td class="pe-3 text-primary br" align="right">
                 <?= number_format($team['inputs'][EVENT_SLUGS[2]]['rank'], 2) ?>
             </td>
 
             <!-- event4 -->
-            <td class="pe-3 bl" align="right">
+            <td class="text-center" align="right">
                 <span class="opacity-75">
-                    <?= number_format($team['inputs'][EVENT_SLUGS[3]]['average'], 2) ?>
+                    <?= number_format($team['inputs'][EVENT_SLUGS[3]]['percentage_average'], 2) ?>
                 </span>
             </td>
             <td class="text-info text-center">
-                <?= number_format($team['inputs'][EVENT_SLUGS[3]]['percentage'], 2) ?>
+                <?= number_format($team['inputs'][EVENT_SLUGS[3]]['percentage_rank'], 2) ?>
             </td>
             <td class="pe-3 text-primary br" align="right">
                 <?= number_format($team['inputs'][EVENT_SLUGS[3]]['rank'], 2) ?>
             </td>
 
             <!-- general average -->
+<!--            <td class="pe-3 bl br fw-bold text-center">-->
+<!--                <span class="opacity-75">-->
+<!--                    --><?//= number_format($team['average'], 2) ?>
+<!--                </span>-->
+<!--            </td>-->
+
+            <!-- total average -->
             <td class="pe-3 bl br fw-bold text-center">
                 <span class="opacity-75">
-                    <?= number_format($team['average'], 2) ?>
+                    <?= number_format($team['percentage_average'], 2) ?>
                 </span>
             </td>
 
-            <!--   total percentage  -->
-            <td class="pe-3 text-primary text-center fw-bold bl br fw-bold">
-                <?= number_format($team['percentage'], 2) ?>
-            </td>
-
-            <!--  total rank -->
-            <td class="pe-3 text-primary fw-bold bl br fw-bold" align="right">
-                <span class="opacity-75"><?= number_format($team['rank']['total'], 2) ?></span>
+            <!--   total percentage rank -->
+            <td class="pe-3 text-info text-center fw-bold bl br fw-bold">
+                <?= number_format($team['rank']['total'], 2) ?>
             </td>
 
             <!-- initial rank -->
