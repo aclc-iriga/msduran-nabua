@@ -6,19 +6,19 @@
     const EVENTS = [
         [
             'slug'    => 'production',
-            'percent' => 10
+            'percent' => 25
         ],
         [
             'slug'    => 'swimsuit',
-            'percent' => 20
+            'percent' => 25
         ],
         [
             'slug'    => 'long-gown',
-            'percent' => 30
+            'percent' => 25
         ],
         [
             'slug'    => 'preliminary-qa',
-            'percent' => 40
+            'percent' => 25
         ]
     ];
 
