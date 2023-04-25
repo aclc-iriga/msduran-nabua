@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2023 at 03:49 PM
+-- Generation Time: Apr 25, 2023 at 06:57 PM
 -- Server version: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- PHP Version: 8.1.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -45,7 +45,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `number`, `name`, `avatar`, `username`, `password`, `called_at`, `pinged_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'DEVELOPMENT', 'no-avatar.jpg', 'admin', 'admin', NULL, NULL, '2023-02-19 07:36:32', '2023-04-24 13:46:24');
+(1, 1, 'DEVELOPMENT', 'no-avatar.jpg', 'admin', 'admin', NULL, '2023-04-25 16:54:20', '2023-02-19 07:36:32', '2023-04-25 16:54:20');
 
 -- --------------------------------------------------------
 
@@ -189,7 +189,15 @@ INSERT INTO `eliminations` (`id`, `event_id`, `team_id`, `created_at`, `updated_
 (10, 5, 10, '2023-04-24 08:10:57', '2023-04-24 08:10:57'),
 (11, 5, 11, '2023-04-24 08:10:58', '2023-04-24 08:10:58'),
 (12, 5, 12, '2023-04-24 08:10:58', '2023-04-24 08:10:58'),
-(13, 5, 13, '2023-04-24 08:10:59', '2023-04-24 08:10:59');
+(13, 5, 13, '2023-04-24 08:10:59', '2023-04-24 08:10:59'),
+(14, 1, 5, '2023-04-25 16:54:24', '2023-04-25 16:54:24'),
+(15, 2, 5, '2023-04-25 16:54:25', '2023-04-25 16:54:25'),
+(16, 3, 5, '2023-04-25 16:54:26', '2023-04-25 16:54:26'),
+(17, 4, 5, '2023-04-25 16:54:28', '2023-04-25 16:54:28'),
+(18, 1, 10, '2023-04-25 16:54:31', '2023-04-25 16:54:31'),
+(19, 2, 10, '2023-04-25 16:54:33', '2023-04-25 16:54:33'),
+(20, 3, 10, '2023-04-25 16:54:34', '2023-04-25 16:54:34'),
+(21, 4, 10, '2023-04-25 16:57:17', '2023-04-25 16:57:17');
 
 -- --------------------------------------------------------
 
@@ -711,7 +719,7 @@ ALTER TABLE `deductions`
 -- AUTO_INCREMENT for table `eliminations`
 --
 ALTER TABLE `eliminations`
-  MODIFY `id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `events`
