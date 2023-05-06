@@ -33,20 +33,22 @@
     // initialize admin
     $admin = new Admin();
 
-    // initialize events
-    $event_1 = Event::findBySlug(EVENTS[0]['slug']);
-    $event_2 = Event::findBySlug(EVENTS[1]['slug']);
-    $event_3 = Event::findBySlug(EVENTS[2]['slug']);
-    $event_4 = Event::findBySlug(EVENTS[3]['slug']);
+    // initialize events and tabulate results
+    $events  = [];
+    $results = [];
+    $competition_title = '';
+    $judges     = [];
+    $technicals = [];
+    for($i=0; $i<sizeof(EVENTS); $i++) {
+        $events[]  = Event::findBySlug(EVENTS[$i]['slug']);
+        $results[] = $admin->tabulate($events[$i]);
 
-    // initialize category
-    $competition_title = $event_1->getCategory()->getCompetition()->getTitle();
-
-    // tabulate events
-    $result_1 = $admin->tabulate($event_1);
-    $result_2 = $admin->tabulate($event_2);
-    $result_3 = $admin->tabulate($event_3);
-    $result_4 = $admin->tabulate($event_4);
+        if($i == 0) {
+            $competition_title = $events[$i]->getCategory()->getCompetition()->getTitle();
+            $judges     = $events[$i]->getAllJudges();
+            $technicals = $events[$i]->getAllTechnicals();
+        }
+    }
 
     // process result
     $result = [];
@@ -55,107 +57,12 @@
     $unique_adjusted_ranks = [];
     foreach(Team::all() as $team) {
         $team_key = 'team_'.$team->getId();
-
-        // get $event_1 rank and average
-        $average_1        = 0;
-        $average_equiv_1  = 0;
-        $rank_1           = 0;
-        $rank_ave_1       = 0;
-        $rank_ave_equiv_1 = 0;
-        if(isset($result_1['teams'][$team_key])) {
-            $average_1        = $result_1['teams'][$team_key]['ratings']['average'];
-            $average_equiv_1  = $average_1 * (EVENTS[0]['percent'] / 100.0);
-            $rank_1           = $result_1['teams'][$team_key]['rank']['final']['fractional'];
-            $rank_ave_1       = 100 - $rank_1;
-            $rank_ave_equiv_1 = $rank_ave_1 * (EVENTS[0]['percent'] / 100.0);
-        }
-
-        // get $event_2 rank and average
-        $average_2        = 0;
-        $average_equiv_2  = 0;
-        $rank_2           = 0;
-        $rank_ave_2       = 0;
-        $rank_ave_equiv_2 = 0;
-        if(isset($result_2['teams'][$team_key])) {
-            $average_2        = $result_2['teams'][$team_key]['ratings']['average'];
-            $average_equiv_2  = $average_2 * (EVENTS[1]['percent'] / 100.0);
-            $rank_2           = $result_2['teams'][$team_key]['rank']['final']['fractional'];
-            $rank_ave_2       = 100 - $rank_2;
-            $rank_ave_equiv_2 = $rank_ave_2 * (EVENTS[1]['percent'] / 100.0);
-        }
-
-        // get $event_3 rank and average
-        $average_3        = 0;
-        $average_equiv_3  = 0;
-        $rank_3           = 0;
-        $rank_ave_3       = 0;
-        $rank_ave_equiv_3 = 0;
-        if(isset($result_3['teams'][$team_key])) {
-            $average_3        = $result_3['teams'][$team_key]['ratings']['average'];
-            $average_equiv_3  = $average_3 * (EVENTS[2]['percent'] / 100.0);
-            $rank_3           = $result_3['teams'][$team_key]['rank']['final']['fractional'];
-            $rank_ave_3       = 100 - $rank_3;
-            $rank_ave_equiv_3 = $rank_ave_3 * (EVENTS[2]['percent'] / 100.0);
-        }
-
-        // get $event_4 rank and average
-        $average_4        = 0;
-        $average_equiv_4  = 0;
-        $rank_4           = 0;
-        $rank_ave_4       = 0;
-        $rank_ave_equiv_4 = 0;
-        if(isset($result_4['teams'][$team_key])) {
-            $average_4        = $result_4['teams'][$team_key]['ratings']['average'];
-            $average_equiv_4  = $average_4 * (EVENTS[3]['percent'] / 100.0);
-            $rank_4           = $result_4['teams'][$team_key]['rank']['final']['fractional'];
-            $rank_ave_4       = 100 - $rank_4;
-            $rank_ave_equiv_4 = $rank_ave_4 * (EVENTS[3]['percent'] / 100.0);
-        }
-
-        // compute totals
-        $total_average_equiv  = $average_equiv_1  + $average_equiv_2  + $average_equiv_3  + $average_equiv_4;
-        $total_rank_ave_equiv = $rank_ave_equiv_1 + $rank_ave_equiv_2 + $rank_ave_equiv_3 + $rank_ave_equiv_4;
-
-        // push $total_rank_ave_equiv to $unique_total_rank_ave_equivs
-        if(!in_array($total_rank_ave_equiv, $unique_total_rank_ave_equivs))
-            $unique_total_rank_ave_equivs[] = $total_rank_ave_equiv;
-
-        // append to $result
-        $result[$team_key] = [
-            'info'   => $team->toArray(),
-            'inputs' => [
-                EVENTS[0]['slug'] => [
-                    'average'        => $average_1,
-                    'average_equiv'  => $average_equiv_1,
-                    'rank'           => $rank_1,
-                    'rank_ave'       => $rank_ave_1,
-                    'rank_ave_equiv' => $rank_ave_equiv_1
-                ],
-                EVENTS[1]['slug'] => [
-                    'average'        => $average_2,
-                    'average_equiv'  => $average_equiv_2,
-                    'rank'           => $rank_2,
-                    'rank_ave'       => $rank_ave_2,
-                    'rank_ave_equiv' => $rank_ave_equiv_2
-                ],
-                EVENTS[2]['slug'] => [
-                    'average'        => $average_3,
-                    'average_equiv'  => $average_equiv_3,
-                    'rank'           => $rank_3,
-                    'rank_ave'       => $rank_ave_3,
-                    'rank_ave_equiv' => $rank_ave_equiv_3
-                ],
-                EVENTS[3]['slug'] => [
-                    'average'        => $average_4,
-                    'average_equiv'  => $average_equiv_4,
-                    'rank'           => $rank_4,
-                    'rank_ave'       => $rank_ave_4,
-                    'rank_ave_equiv' => $rank_ave_equiv_4
-                ]
-            ],
-            'average' => $total_average_equiv,
-            'rank' => [
-                'total'    => $total_rank_ave_equiv,
+        $t = [
+            'info'    => $team->toArray(),
+            'inputs'  => [],
+            'average' => 0,
+            'rank'    => [
+                'total'    => 0,
                 'dense'    => 0,
                 'initial'  => 0,
                 'adjusted' => 0,
@@ -166,6 +73,38 @@
             ],
             'title' => ''
         ];
+
+        // get rank and average
+        for($i=0; $i<sizeof(EVENTS); $i++) {
+            $r = [
+                'average'        => 0,
+                'average_equiv'  => 0,
+                'rank'           => 0,
+                'rank_ave'       => 0,
+                'rank_ave_equiv' => 0
+            ];
+            if(isset($results[$i]['teams'][$team_key])) {
+                $r['average']        = $results[$i]['teams'][$team_key]['ratings']['average'];
+                $r['average_equiv']  = $r['average'] * (EVENTS[$i]['percent'] / 100.0);
+                $r['rank']           = $results[$i]['teams'][$team_key]['rank']['final']['fractional'];
+                $r['rank_ave']       = 100 - $r['rank'];
+                $r['rank_ave_equiv'] = $r['rank_ave'] * (EVENTS[$i]['percent'] / 100.0);
+            }
+
+            // append $r to $t['inputs']
+            $t['inputs'][EVENTS[$i]['slug']] = $r;
+
+            // accumulate totals
+            $t['average'] += $r['average_equiv'];
+            $t['rank']['total'] += $r['rank_ave_equiv'];
+        }
+
+        // push $t['rank']['total'] to $unique_total_rank_ave_equivs
+        if(!in_array($t['rank']['total'], $unique_total_rank_ave_equivs))
+            $unique_total_rank_ave_equivs[] = $t['rank']['total'];
+
+        // append $t to $result
+        $result[$team_key] = $t;
     }
 
     // sort $unique_total_rank_ave_equivs
@@ -311,18 +250,11 @@
                         <h1 class="m-0">TOP <?= sizeof($titles) ?></h1>
                         <h5><?= $competition_title ?></h5>
                     </th>
-                    <th colspan="3" class="text-center text-success bt br">
-                        <h5 class="m-0"><?= $event_1->getTitle() ?></h5>
-                    </th>
-                    <th colspan="3" class="text-center text-success bt br">
-                        <h5 class="m-0"><?= $event_2->getTitle() ?></h5>
-                    </th>
-                    <th colspan="3" class="text-center text-success bt br">
-                        <h5 class="m-0"><?= $event_3->getTitle() ?></h5>
-                    </th>
-                    <th colspan="3" class="text-center text-success bt br">
-                        <h5 class="m-0"><?= $event_4->getTitle() ?></h5>
-                    </th>
+                    <?php for($i=0; $i<sizeof($events); $i++) { ?>
+                        <th colspan="3" class="text-center text-success bt br">
+                            <h5 class="m-0"><?= $events[$i]->getTitle() ?></h5>
+                        </th>
+                    <?php } ?>
                     <th rowspan="3" class="text-center bl bt br bb">
                         TOTAL
                     </th>
@@ -337,23 +269,15 @@
                     </th>
                 </tr>
                 <tr class="table-secondary">
-                    <th colspan="2" class="text-center bl"><span class="opacity-75">Average</span></th>
-                    <th rowspan="2" class="bb br text-center"><h5 class="m-0"><?= EVENTS[0]['percent'] ?>%</h5></th>
-
-                    <th colspan="2" class="text-center bl"><span class="opacity-75">Average</span></th>
-                    <th rowspan="2" class="bb br text-center"><h5 class="m-0"><?= EVENTS[1]['percent'] ?>%</h5></th>
-
-                    <th colspan="2" class="text-center bl"><span class="opacity-75">Average</span></th>
-                    <th rowspan="2" class="bb br text-center"><h5 class="m-0"><?= EVENTS[2]['percent'] ?>%</h5></th>
-
-                    <th colspan="2" class="text-center bl"><span class="opacity-75">Average</span></th>
-                    <th rowspan="2" class="bb br text-center"><h5 class="m-0"><?= EVENTS[3]['percent'] ?>%</h5></th>
+                    <?php for($i=0; $i<sizeof(EVENTS); $i++) { ?>
+                        <th colspan="2" class="text-center bl"><span class="opacity-75">Average</span></th>
+                        <th rowspan="2" class="bb br text-center"><h5 class="m-0"><?= EVENTS[$i]['percent'] ?>%</h5></th>
+                    <?php } ?>
                 </tr>
                 <tr class="table-secondary">
-                    <th colspan="2" class="bb text-center">Rank / Equiv.</th>
-                    <th colspan="2" class="bb text-center">Rank / Equiv.</th>
-                    <th colspan="2" class="bb text-center">Rank / Equiv.</th>
-                    <th colspan="2" class="bb text-center">Rank / Equiv.</th>
+                    <?php for($i=0; $i<sizeof(EVENTS); $i++) { ?>
+                        <th colspan="2" class="bb text-center">Rank / Equiv.</th>
+                    <?php } ?>
                 </tr>
             </thead>
             <tbody>
@@ -382,21 +306,11 @@
                         <small class="m-0"><?= $team['info']['location'] ?></small>
                     </td>
 
-                    <!-- event1 average -->
-                    <td colspan="2" class="pe-3" align="right"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[0]['slug']]['average'], 2) ?></span></td>
-                    <td align="right" class="pe-3 br text-secondary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[0]['slug']]['average_equiv'], 2) ?></span></td>
-
-                    <!-- event2 average -->
-                    <td colspan="2" class="pe-3" align="right"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[1]['slug']]['average'], 2) ?></span></td>
-                    <td align="right" class="pe-3 br text-secondary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[1]['slug']]['average_equiv'], 2) ?></span></td>
-
-                    <!-- event3 average -->
-                    <td colspan="2" class="pe-3" align="right"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[2]['slug']]['average'], 2) ?></span></td>
-                    <td align="right" class="pe-3 br text-secondary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[2]['slug']]['average_equiv'], 2) ?></span></td>
-
-                    <!-- event4 average -->
-                    <td colspan="2" class="pe-3" align="right"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[3]['slug']]['average'], 2) ?></span></td>
-                    <td align="right" class="pe-3 br text-secondary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[3]['slug']]['average_equiv'], 2) ?></span></td>
+                    <!-- averages -->
+                    <?php for($i=0; $i<sizeof(EVENTS); $i++) { ?>
+                        <td colspan="2" class="pe-3" align="right"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[$i]['slug']]['average'], 2) ?></span></td>
+                        <td align="right" class="pe-3 br text-secondary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[$i]['slug']]['average_equiv'], 2) ?></span></td>
+                    <?php } ?>
 
                     <!-- total average -->
                     <td class="br pe-3 text-secondary fw-bold" align="right"><?= number_format($team['average'], 2) ?></td>
@@ -414,25 +328,11 @@
                 </tr>
 
                 <tr<?= $team['title'] !== '' ? ' class="table-warning"' : '' ?>>
-                    <!-- event1 rank -->
-                    <td align="right" class="bb pe-3 text-primary"><?= number_format($team['inputs'][EVENTS[0]['slug']]['rank'], 2) ?></td>
-                    <td align="right" class="bb pe-3 text-primary"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[0]['slug']]['rank_ave'], 2) ?></span></td>
-                    <td align="right" class="bb br pe-3 text-primary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[0]['slug']]['rank_ave_equiv'], 2) ?></span></td>
-
-                    <!-- event2 rank -->
-                    <td align="right" class="bb pe-3 text-primary"><?= number_format($team['inputs'][EVENTS[1]['slug']]['rank'], 2) ?></td>
-                    <td align="right" class="bb pe-3 text-primary"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[1]['slug']]['rank_ave'], 2) ?></span></td>
-                    <td align="right" class="bb br pe-3 text-primary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[1]['slug']]['rank_ave_equiv'], 2) ?></span></td>
-
-                    <!-- event3 rank -->
-                    <td align="right" class="bb pe-3 text-primary"><?= number_format($team['inputs'][EVENTS[2]['slug']]['rank'], 2) ?></td>
-                    <td align="right" class="bb pe-3 text-primary"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[2]['slug']]['rank_ave'], 2) ?></span></td>
-                    <td align="right" class="bb br pe-3 text-primary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[2]['slug']]['rank_ave_equiv'], 2) ?></span></td>
-
-                    <!-- event4 rank -->
-                    <td align="right" class="bb pe-3 text-primary"><?= number_format($team['inputs'][EVENTS[3]['slug']]['rank'], 2) ?></td>
-                    <td align="right" class="bb pe-3 text-primary"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[3]['slug']]['rank_ave'], 2) ?></span></td>
-                    <td align="right" class="bb br pe-3 text-primary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[3]['slug']]['rank_ave_equiv'], 2) ?></span></td>
+                    <?php for($i=0; $i<sizeof($events); $i++) { ?>
+                        <td align="right" class="bb pe-3 text-primary"><?= number_format($team['inputs'][EVENTS[$i]['slug']]['rank'], 2) ?></td>
+                        <td align="right" class="bb pe-3 text-primary"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[$i]['slug']]['rank_ave'], 2) ?></span></td>
+                        <td align="right" class="bb br pe-3 text-primary fw-bold"><span class="opacity-75"><?= number_format($team['inputs'][EVENTS[$i]['slug']]['rank_ave_equiv'], 2) ?></span></td>
+                    <?php } ?>
 
                     <!-- total rank -->
                     <td class="br bb pe-3 text-primary fw-bold" align="right"><?= number_format($team['rank']['total'], 2) ?></td>
@@ -450,7 +350,7 @@
         <!-- Judges -->
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <?php foreach($event_1->getAllJudges() as $judge) { ?>
+                <?php foreach($judges as $judge) { ?>
                     <div class="col-md-3">
                         <div class="mt-5 pt-3 text-center">
                             <h6 class="mb-0"><?= $judge->getName() ?></h6>
@@ -458,7 +358,7 @@
                         <div class="text-center">
                             <p class="mb-0">
                                 Judge <?= $judge->getNumber() ?>
-                                <?php if($judge->isChairmanOfEvent($event_1)) { ?>
+                                <?php if($judge->isChairmanOfEvent($events[0])) { ?>
                                     * (Chairman)
                                 <?php } ?>
                             </p>
